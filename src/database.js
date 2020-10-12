@@ -595,3 +595,5 @@ const heroes = [
     localized_name: "Snapfire",
   },
 ];
+
+module.exports = { heroes };
