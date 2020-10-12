@@ -14,7 +14,7 @@ You will also see any lint errors in the console.
 
 ## Miscellaneous info:
 
-- hero icons are created through "<i className="d2mh [heroname/npc_dota_hero_[heroname]/heroid]" />
+- hero icons are created through <i className=\"d2mh [heroname / npc_dota_hero\_[heroname] / heroid]\" />
 - Icon component will hold information of hero displayed in state.
 - Table component will create a table with an Icon component in each cell.
 - App will handle game mechanics.

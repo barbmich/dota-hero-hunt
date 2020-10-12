@@ -3,5 +3,10 @@ import Icon from "./Icon";
 
 export default function Table(props) {
   const { matchHeroesList } = props;
-  return <Icon heroInfo={matchHeroesList[3]} />;
+
+  const arrayOfHeroes = matchHeroesList.map((hero, i) => {
+    return <Icon key={i} heroInfo={hero} />;
+  });
+
+  return arrayOfHeroes;
 }
