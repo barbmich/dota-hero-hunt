@@ -10,14 +10,16 @@ import "./components/Icon";
 
 function App() {
   const matchHeroesList = randomizeHeroesTable(heroes);
+  // const [score, setScore] = useState(0);
   const [heroToHunt, setHeroToHunt] = useState(
     matchHeroesList[randomizeHeroHunt(0, 95)]
   );
+
   function heroFound(hero) {
-    console.log("state:", heroToHunt.id);
-    console.log("hero clicked", hero.id);
     if (hero.id === heroToHunt.id) {
       alert("you found it!");
+      // setScore(score + 1);
+      window.location.reload();
     }
   }
 
@@ -31,7 +33,10 @@ function App() {
       }}
     >
       <h1>THE DOTA2 HERO HUNT</h1>
-      <h3>Find the hidden hero!</h3>
+      <h3>
+        Find the hidden hero!
+        {/* Current score: {score} */}
+      </h3>
       <section style={{ width: "512px" }}>
         <h3 style={{ textAlign: "center" }}>
           FIND THE FOLLOWING HERO: {heroToHunt.localized_name}
