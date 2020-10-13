@@ -3,14 +3,17 @@ import "../../node_modules/dota2-minimap-hero-sprites/assets/stylesheets/dota2mi
 const classNames = require("classnames");
 
 export default function Icon(props) {
-  const { heroInfo } = props;
-  const [hero, setHero] = useState(heroInfo.id);
+  const { heroInfo, heroFound } = props;
+  const [hero, setHero] = useState(heroInfo);
   const heroIcon = classNames("d2mh", `hero-${heroInfo && heroInfo.id}`);
 
   return (
     <i
       className={heroIcon}
-      onClick={() => console.log(`You clicked on ${heroInfo.localized_name}`)}
+      onClick={() => {
+        console.log(`You clicked on ${hero.localized_name}`);
+        return heroFound(hero);
+      }}
     />
   );
 }

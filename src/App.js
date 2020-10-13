@@ -9,18 +9,33 @@ import { randomizeHeroHunt } from "./helpers/randomizeHeroHunt";
 
 function App() {
   const matchHeroesList = randomizeHeroesTable(heroes);
-  const heroToHunt = matchHeroesList[randomizeHeroHunt(0, 95)].localized_name;
+  const [heroToHunt, setHeroToHunt] = useState(
+    matchHeroesList[randomizeHeroHunt(0, 95)]
+  );
+  function heroFound(hero) {
+    console.log("state:", heroToHunt.id);
+    console.log("hero clicked", hero.id);
+    if (hero.id === heroToHunt.id) {
+      alert("you found it!");
+    }
+  }
+
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: "3em",
+      }}
     >
       <h1>THE DOTA2 HERO HUNT</h1>
       <h3>Find the hidden hero!</h3>
-      <section style={{ width: "43%" }}>
+      <section style={{ width: "512px" }}>
         <h3 style={{ textAlign: "center" }}>
-          FIND THE FOLLOWING HERO: {heroToHunt}
+          FIND THE FOLLOWING HERO: {heroToHunt.localized_name}
         </h3>
-        <Table matchHeroesList={matchHeroesList} />
+        <Table matchHeroesList={matchHeroesList} heroFound={heroFound} />
       </section>
     </div>
   );
