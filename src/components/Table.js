@@ -1,5 +1,6 @@
 import React from "react";
 import Icon from "./Icon";
+import "./table.css";
 
 export default function Table(props) {
   const { matchHeroesList, heroFound } = props;

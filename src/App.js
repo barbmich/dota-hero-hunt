@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { randomizeHeroesTable } from "./helpers/randomizeHeroTable";
+import { randomizeHeroHunt } from "./helpers/randomizeHeroHunt";
+import { heroes } from "./database";
+import Table from "./components/Table";
+
 import "./App.css";
 import "../node_modules/dota2-minimap-hero-sprites/assets/stylesheets/dota2minimapheroes.css";
 import "./components/Icon";
-import Table from "./components/Table";
-import { heroes } from "./database";
-import { randomizeHeroesTable } from "./helpers/randomizeHeroTable";
-import { randomizeHeroHunt } from "./helpers/randomizeHeroHunt";
 
 function App() {
   const matchHeroesList = randomizeHeroesTable(heroes);
@@ -35,7 +36,11 @@ function App() {
         <h3 style={{ textAlign: "center" }}>
           FIND THE FOLLOWING HERO: {heroToHunt.localized_name}
         </h3>
-        <Table matchHeroesList={matchHeroesList} heroFound={heroFound} />
+        <Table
+          matchHeroesList={matchHeroesList}
+          heroFound={heroFound}
+          className={"table"}
+        />
       </section>
     </div>
   );
