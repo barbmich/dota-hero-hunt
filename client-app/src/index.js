@@ -4,15 +4,15 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
-export const socket = new WebSocket("ws://localhost:6500");
+// const socket = new WebSocket("ws://localhost:6500");
 
-socket.addEventListener("open", () => {
-  socket.send("from client to server");
-});
+// socket.addEventListener("open", () => {
+//   socket.send("from client to server");
+// });
 
-socket.addEventListener("message", function (event) {
-  console.log("message from server:", event.data);
-});
+// socket.addEventListener("message", function (event) {
+//   console.log("message from server:", event.data);
+// });
 
 ReactDOM.render(
   <React.StrictMode>

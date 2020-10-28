@@ -1,58 +1,54 @@
 import React, { useEffect, useState } from "react";
-import {
-  TableAndTarget,
-  randomizeHeroesTable,
-  randomValue,
-} from "./helpers/randomizeHeroTable";
-import { heroes } from "./database";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Game from "./components/Game";
+import Table from "./components/Table";
 import Score from "./components/Score";
+import axios from "axios";
 
 import "./App.css";
 import "../node_modules/dota2-minimap-hero-sprites/assets/stylesheets/dota2minimapheroes.css";
 import "./components/Icon";
+import Homepage from "./components/Homepage";
 
 function App() {
   const [score, setScore] = useState(0);
   const [fullState, setFullState] = useState({ heroList: [], heroToHunt: {} });
-  const [heroList, setHeroList] = useState([]);
-  const [heroToHunt, setHeroToHunt] = useState(null);
-
+  const [loading, setLoading] = useState(true);
+  console.log("rerender");
   useEffect(() => {
-    const table = randomizeHeroesTable(heroes);
-    setHeroList(table);
-    setHeroToHunt(table[randomValue()]);
+    axios.get("http://localhost:6500/game").then((res) => {
+      setFullState({
+        ...fullState,
+        heroList: res.data.heroList,
+        heroToHunt: res.data.heroToHunt,
+      });
+      setLoading(false);
+    });
   }, [score]);
 
   function heroFound(hero) {
-    if (hero.id === heroToHunt.id) {
+    if (hero.id === fullState.heroToHunt.id) {
       setScore(score + 1);
     }
   }
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        marginTop: "3em",
-      }}
-    >
-      <h1>THE DOTA2 HERO HUNT</h1>
-      <section style={{ width: "512px" }}>
-        <h3 style={{ textAlign: "center" }}>
-          FIND THE FOLLOWING HERO: {heroToHunt && heroToHunt.localized_name}
-        </h3>
-        <Score score={score} />
-        <Game
-          matchHeroesList={heroList}
-          heroToHunt={heroToHunt}
-          heroFound={heroFound}
-          className={"table"}
-        />
-      </section>
-    </div>
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
+    <Router>
+      <Route
+        path="/game"
+        render={(props) => (
+          <Game
+            {...props}
+            fullState={fullState}
+            score={score}
+            heroFound={heroFound}
+          />
+        )}
+      />
+      <Route exact path="/" component={Homepage} />
+    </Router>
   );
 }
 
