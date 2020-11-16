@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useState } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Game from "./components/Game";
 import HomePage from "./components/Homepage";
 import useGame from "./hooks/useGame";
@@ -13,16 +13,29 @@ function App() {
     users,
     sendUsers,
     startGame,
+    setFullState,
     fullState,
     resetUserList,
     heroFound,
+    start,
   } = useGame();
 
   return (
     <Switch>
       <Route
         path="/game"
-        render={() => <Game fullState={fullState} heroFound={heroFound} />}
+        render={() =>
+          start ? (
+            <Game
+              setFullState={setFullState}
+              fullState={fullState}
+              heroFound={heroFound}
+              users={users}
+            />
+          ) : (
+            <Redirect to="/" />
+          )
+        }
       />
       <Route
         path="/"

@@ -15,7 +15,6 @@ export default function Icon(props) {
           : { backgroundColor: "inherit" }
       }
       onClick={() => {
-        console.log(`You clicked on ${heroInfo.localized_name}`);
         return heroFound(heroInfo);
       }}
     />

@@ -5,8 +5,6 @@ const io = require("socket.io")(server, {
   origin: "http://localhost:3000",
 });
 const cors = require("cors");
-const { Socket } = require("socket.io");
-const { heroes } = require("./db/database.js");
 const { Game } = require("./helpers/game.js");
 const port = 6500;
 
@@ -17,6 +15,7 @@ const NEW_GAME_INSTANCE = "newGameInstance";
 const USER_LIST = "userList";
 const RESET_USER_LIST = "resetUserList";
 const HERO_FOUND = "heroFound";
+const NEW_ROUND = "newRound";
 
 let users = [];
 const roomId = 1;
@@ -41,12 +40,10 @@ io.on("connection", (socket) => {
       heroList: table,
       heroToHunt: table[game.randomValue()],
     };
-    console.log(gameInstance.heroToHunt);
     io.emit(NEW_GAME_INSTANCE, gameInstance);
   });
 
   socket.on(HERO_FOUND, (data) => {
-    console.log("hero found data:", data);
     if (data.body.id === gameInstance.heroToHunt.id) {
       const winner = users.find((user) => user.senderId === data.senderId);
       users.forEach((user) => {
@@ -54,9 +51,18 @@ io.on("connection", (socket) => {
           user.score += 1;
         }
       });
-      console.log(users);
-      io.emit(HERO_FOUND, winner);
+      io.emit(HERO_FOUND, { winner, users });
     }
+  });
+
+  socket.on(NEW_ROUND, () => {
+    const game = new Game();
+    const table = game.randomizeHeroesTable();
+    gameInstance = {
+      heroList: table,
+      heroToHunt: table[game.randomValue()],
+    };
+    io.emit(NEW_ROUND, gameInstance);
   });
 
   socket.on(RESET_USER_LIST, () => {
@@ -69,11 +75,5 @@ io.on("connection", (socket) => {
     socket.leave(roomId);
   });
 });
-
-// app.get("/game", (req, res) => {
-//   const game = new Game();
-//   const table = game.randomizeHeroesTable();
-//   res.send({ heroList: table, heroToHunt: table[game.randomValue()] });
-// });
 
 server.listen(port, () => console.log("server is up on port", port));

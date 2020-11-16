@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Score from "./Score";
 import Table from "./Table";
 
 export default function Game(props) {
-  const { fullState, heroFound } = props;
-  const [score, setScore] = useState(0);
-
-  console.log("fullstate:", fullState);
+  const { fullState, heroFound, users, setFullState } = props;
 
   return (
     <div
@@ -24,13 +20,13 @@ export default function Game(props) {
           FIND THE FOLLOWING HERO:{" "}
           {fullState.heroToHunt && fullState.heroToHunt.localized_name}
         </h3>
-        <Score score={score} />
         <Table
           matchHeroesList={fullState.heroList}
           heroToHunt={fullState.heroToHunt}
           heroFound={heroFound}
           className={"table"}
         />
+        <Score users={users} />
       </section>
     </div>
   );

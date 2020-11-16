@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import { useHistory } from "react-router-dom";
 
@@ -9,20 +8,19 @@ const USER_LIST = "userList";
 const NEW_GAME_INSTANCE = "newGameInstance";
 const RESET_USER_LIST = "resetUserList";
 const HERO_FOUND = "heroFound";
+const NEW_ROUND = "newRound";
 
 const useGame = () => {
   const [users, setUsers] = useState([]);
   const [fullState, setFullState] = useState({ heroList: [], heroToHunt: {} });
+  const [start, setStart] = useState(false);
   const socketRef = useRef();
   const history = useHistory();
-
-  console.log("users: ", users);
 
   useEffect(() => {
     socketRef.current = socketIOClient(SOCKET_SERVER_URL);
 
     socketRef.current.on(USER_LIST, (data) => {
-      console.log(USER_LIST, data);
       setUsers(data);
     });
 
@@ -35,8 +33,8 @@ const useGame = () => {
     });
 
     socketRef.current.on(NEW_GAME_INSTANCE, (data) => {
-      console.log("hook:", data);
       setFullState(data);
+      setStart(true);
       history.push("/game");
     });
 
@@ -45,8 +43,11 @@ const useGame = () => {
     });
 
     socketRef.current.on(HERO_FOUND, (data) => {
-      console.log(data);
-      alert(`The winner is ${data.name}`);
+      setUsers(data.users);
+    });
+
+    socketRef.current.on(NEW_ROUND, (data) => {
+      setFullState(data);
     });
 
     return () => {
@@ -62,7 +63,6 @@ const useGame = () => {
   }
 
   function startGame() {
-    console.log("start game");
     socketRef.current.emit(NEW_GAME_INSTANCE);
   }
 
@@ -70,17 +70,30 @@ const useGame = () => {
     socketRef.current.emit(RESET_USER_LIST);
   }
 
+  function newRound() {
+    socketRef.current.emit(NEW_ROUND);
+  }
+
   function heroFound(hero) {
     if (hero.id === fullState.heroToHunt.id) {
-      console.log("hero found");
       socketRef.current.emit(HERO_FOUND, {
         body: hero,
         senderId: socketRef.current.id,
       });
+      newRound();
     }
   }
 
-  return { users, sendUsers, startGame, fullState, resetUserList, heroFound };
+  return {
+    users,
+    sendUsers,
+    startGame,
+    fullState,
+    resetUserList,
+    heroFound,
+    start,
+    setStart,
+  };
 };
 
 export default useGame;

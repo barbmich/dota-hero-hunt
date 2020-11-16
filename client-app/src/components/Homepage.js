@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
-import useGame from "../hooks/useGame";
 
 export default function Homepage({
   users,
