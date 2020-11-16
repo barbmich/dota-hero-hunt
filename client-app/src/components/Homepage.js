@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import useGame from "../hooks/useGame";
 
-export default function Homepage({ users, sendUsers }) {
+export default function Homepage({
+  users,
+  sendUsers,
+  startGame,
+  resetUserList,
+}) {
   const [username, setUsername] = useState("");
   const [disabled, setDisabled] = useState(false);
-
-  console.log(users);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -30,9 +33,12 @@ export default function Homepage({ users, sendUsers }) {
         list of players:
         <ul>
           {users.map((user, i) => (
-            <li key={i}>{user.body}</li>
+            <li key={i}>{user.name}</li>
           ))}
         </ul>
+        <button onClick={startGame}>start game</button>
+        <br />
+        <button onClick={resetUserList}>reset players</button>
       </div>
     </main>
   );

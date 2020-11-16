@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import io from "socket.io-client";
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 import Game from "./components/Game";
 import HomePage from "./components/Homepage";
 import useGame from "./hooks/useGame";
@@ -10,18 +9,33 @@ import "../node_modules/dota2-minimap-hero-sprites/assets/stylesheets/dota2minim
 import "./components/Icon";
 
 function App() {
-  const { users, sendUsers } = useGame();
+  const {
+    users,
+    sendUsers,
+    startGame,
+    fullState,
+    resetUserList,
+    heroFound,
+  } = useGame();
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/game" render={(props) => <Game props={props} />} />
-        <Route
-          path="/"
-          render={() => <HomePage users={users} sendUsers={sendUsers} />}
-        />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route
+        path="/game"
+        render={() => <Game fullState={fullState} heroFound={heroFound} />}
+      />
+      <Route
+        path="/"
+        render={() => (
+          <HomePage
+            users={users}
+            sendUsers={sendUsers}
+            startGame={startGame}
+            resetUserList={resetUserList}
+          />
+        )}
+      />
+    </Switch>
   );
 }
 
