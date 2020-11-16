@@ -1,27 +1,39 @@
-const express = require("express");
-const app = express();
-const WebSocket = require("ws");
+const app = require("express")();
 const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+  cors: true,
+  origin: "http://localhost:3000",
+});
 const cors = require("cors");
 const { heroes } = require("./db/database.js");
 const { randomizeHeroesTable, randomValue } = require("./helpers/helpers.js");
-
-const wss = new WebSocket.Server({ server });
+const port = 6500;
 
 app.use(cors());
 
-// wss.on("connection", function connection(ws) {
-//   console.log("new client connected");
-//   ws.send("you connected");
-//   ws.on("message", function incoming(message) {
-//     console.log("received: %s", message);
-//     ws.send(`got your message, it's: ${message}`);
-//   });
-// });
+const NEW_USER_EVENT = "newUserEvent";
+const NEW_GAME_INSTANCE = "newGameInstance";
+
+io.on("connection", (socket) => {
+  console.log(`client ${socket.id} connected`);
+  const roomId = 1;
+  socket.join(roomId);
+
+  socket.on(NEW_USER_EVENT, (data) => {
+    io.emit(NEW_USER_EVENT, data);
+  });
+
+  socket.on(NEW_GAME_INSTANCE, (data) => {});
+
+  socket.on("disconnect", () => {
+    console.log(`client ${socket.id} disconnected`);
+    socket.leave(roomId);
+  });
+});
 
 app.get("/game", (req, res) => {
   const table = randomizeHeroesTable(heroes);
   res.send({ heroList: table, heroToHunt: table[randomValue()] });
 });
 
-server.listen(6500, () => console.log("server is up"));
+server.listen(port, () => console.log("server is up on port", port));

@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "./Icon";
+import Icon from "../components/Icon";
 import "./table.css";
 
 export default function Table(props) {
@@ -18,5 +18,9 @@ export default function Table(props) {
       );
     });
 
-  return arrayOfHeroes;
+  return (
+    <div style={{ border: "2px solid gold", width: "516px" }}>
+      {arrayOfHeroes}
+    </div>
+  );
 }
