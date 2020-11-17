@@ -2,11 +2,11 @@ const app = require("express")();
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
   cors: true,
-  origin: "http://localhost:3000",
+  origin: "*",
 });
 const cors = require("cors");
 const { Game } = require("./helpers/game.js");
-const port = 6500;
+const port = process.env.PORT;
 
 app.use(cors());
 
@@ -76,4 +76,5 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/", (req, res) => res.send("server is available"));
 server.listen(port, () => console.log("server is up on port", port));

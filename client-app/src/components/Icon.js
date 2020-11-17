@@ -10,9 +10,9 @@ export default function Icon(props) {
     <i
       className={heroIcon}
       style={
-        heroToHunt.id === heroInfo.id
-          ? { backgroundColor: "white" }
-          : { backgroundColor: "inherit" }
+        // heroToHunt.id === heroInfo.id
+        // ? { backgroundColor: "white" } :
+        { backgroundColor: "inherit" }
       }
       onClick={() => {
         return heroFound(heroInfo);

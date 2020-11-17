@@ -31,7 +31,9 @@ export default function Homepage({
         list of players:
         <ul>
           {users.map((user, i) => (
-            <li key={i}>{user.name}</li>
+            <li style={{ listStyle: "none" }} key={i}>
+              {user.name}
+            </li>
           ))}
         </ul>
         <button onClick={startGame}>start game</button>

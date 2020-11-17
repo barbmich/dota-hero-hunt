@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import { useHistory } from "react-router-dom";
 
-const SOCKET_SERVER_URL = "http://localhost:6500";
+const SOCKET_SERVER_URL = "https://barbmich-dota-hero-hunt.herokuapp.com/";
 const NEW_USER_EVENT = "newUserEvent";
 const USER_LIST = "userList";
 const NEW_GAME_INSTANCE = "newGameInstance";
