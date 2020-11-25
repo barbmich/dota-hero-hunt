@@ -6,7 +6,7 @@ const io = require("socket.io")(server, {
 });
 const cors = require("cors");
 const { Game } = require("./helpers/game.js");
-const port = process.env.PORT;
+const port = process.env.PORT || 5500;
 
 app.use(cors());
 
@@ -20,8 +20,10 @@ const NEW_ROUND = "newRound";
 let users = [];
 const roomId = 1;
 let gameInstance = {};
+let connections = [];
 
 io.on("connection", (socket) => {
+  connections.push(socket);
   console.log(`client ${socket.id} connected`);
   socket.join(roomId);
 
@@ -73,6 +75,11 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`client ${socket.id} disconnected`);
     socket.leave(roomId);
+    const index = connections.indexOf(
+      (connection) => connection.senderId === socket.senderId
+    );
+    connections = connections.splice(index, 1);
+    console.log(connections.length);
   });
 });
 

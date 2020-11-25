@@ -9,6 +9,7 @@ export default function Homepage({
   const [username, setUsername] = useState("");
   const [disabled, setDisabled] = useState(false);
 
+  console.log(users.length);
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -36,9 +37,19 @@ export default function Homepage({
             </li>
           ))}
         </ul>
-        <button onClick={startGame}>start game</button>
+        <button
+          disabled={users.length === 0 ? true : false}
+          onClick={startGame}
+        >
+          start game
+        </button>
         <br />
-        <button onClick={resetUserList}>reset players</button>
+        <button
+          disabled={users.length !== 0 ? false : true}
+          onClick={resetUserList}
+        >
+          reset players
+        </button>
       </div>
     </main>
   );
